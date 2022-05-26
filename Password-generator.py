@@ -7,7 +7,7 @@ characters = list(string.ascii_letters + string.digits + "[email protected]#$%^&
 
 def generate_random_password():
 	## length of password from the user
-	length = int(input("Indique largo de la contrasena: "))
+	length = int(input("Indique largo de la contraseña: "))
 
 	## shuffling the characters
 	random.shuffle(characters)
@@ -21,8 +21,10 @@ def generate_random_password():
 	random.shuffle(password)
 
 	## converting the list to string
-	## printing the list
-	print("Nueva contrasena".join(password))
+	## printing the password
+	print("Nueva contraseña:\n")
+	print("".join(password))
+	print("\n\n")
 
 
 
